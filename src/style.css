@@ -1,0 +1,19 @@
+.container {
+    text-align: center;
+    font-family: 'Oxanium', sans-serif;
+}
+
+h1{
+    font-size: 4em;
+}
+
+h2{
+    font-size: 3em;    
+}
+
+.contact_form {
+    width: 70%;
+    margin: 50px auto;
+    border: 1px dotted darkgray;
+    padding: 30px;
+}

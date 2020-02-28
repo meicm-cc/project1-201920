@@ -1,0 +1,7 @@
+{
+    "settings":{
+        "port": 8080,
+        "hostname":"localhost",
+        "email":"mail@ricardogomes.me"
+    }
+}
