@@ -1,0 +1,7 @@
+project_name = "meicm-cc"
+region = "europe-west2"
+zone = "europe-west2-a"
+machine_type = "f1-micro"
+user = "ricardo"
+public_key_path = "~/.ssh/id_rsa.pub"
+credentials_path= "../../secrets/gcp-meicm-cc.json"

@@ -1,0 +1,58 @@
+---
+# Node Server Provisioning
+- name: Deploy Node Server
+  hosts: [node_servers]
+  become: true
+  roles:
+    - geerlingguy.nodejs
+  vars_files:
+    - vars/main.yml
+  tasks:
+    - name: Stop Apache2 service
+      service:
+        name: apache2
+        state: stopped 
+      register: apache2_service_result
+      failed_when: "apache2_service_result is failed and 'Could not find the requested service' not in apache2_service_result.msg"
+    - name: NODE | Install pm2
+      npm:
+        name: pm2
+        global: yes
+        production: yes
+        state: present
+    - name: Install Auhtbind (port 80 without root)
+      apt:
+        name: authbind
+        state: present
+    - name: Setup Authbind
+      file:
+        path: /etc/authbind/byport/80
+        state: touch
+        owner: "{{ansible_user}}"
+        mode: u=rwx,g=r,o=r
+      become: yes
+    - name: Create directory for service
+      file:
+        path: "/var/app"
+        state: directory
+        owner: "{{ansible_user}}"
+        mode: u=rwx,g=r,o=r
+    - name: Copy Project
+      synchronize:
+        src: "../src/"
+        dest: "/var/app"
+    - name: install node dependencies
+      shell: npm install --production
+      args:
+        chdir: "/var/app"
+
+    - name: NODE | Start APP
+      shell: authbind --deep pm2 start server.js --name app -f
+      args:
+        chdir: /var/app
+      environment:
+        NODE_ENV: production
+        SENDGRID_API_KEY: "{{sendGridKey}}"
+      register: pm2_start
+    - debug: msg="{{ pm2_start.stdout }}"
+    - debug: msg="{{ pm2_start.stderr }}"

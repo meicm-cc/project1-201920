@@ -1,0 +1,8 @@
+[node_servers]
+aws      ansible_host=34.243.218.50 ansible_user=ubuntu ansible_port=22 ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
+gcp      ansible_host=34.89.30.199 ansible_user=ricardo ansible_port=22 ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
+azure    ansible_host=52.166.89.213 ansible_user=ricardo ansible_port=22 ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
+
+
+[node_servers:vars]
+ansible_python_interpreter=/usr/bin/python3
