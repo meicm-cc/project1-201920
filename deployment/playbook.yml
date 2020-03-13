@@ -3,6 +3,13 @@
 - name: Deploy Node Server
   hosts: [node_servers]
   become: true
+  pre_tasks:
+    - name: Update apt cache if needed.
+      apt: 
+        update_cache: yes 
+        cache_valid_time: 3600
+        upgrade: yes
+        force_apt_get: yes
   roles:
     - geerlingguy.nodejs
   vars_files:
@@ -20,7 +27,7 @@
         global: yes
         production: yes
         state: present
-    - name: Install Auhtbind (port 80 without root)
+    - name: Install Authbind (port 80 without root)
       apt:
         name: authbind
         state: present
@@ -45,7 +52,6 @@
       shell: npm install --production
       args:
         chdir: "/var/app"
-
     - name: NODE | Start APP
       shell: authbind --deep pm2 start server.js --name app -f
       args:
